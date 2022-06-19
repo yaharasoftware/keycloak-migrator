@@ -35,6 +35,18 @@ namespace Keycloak.Migrator.DataServices.Modules
                 .RegisterType<GroupSyncService>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder
+                .RegisterType<GroupDataService>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder
+                .RegisterType<RealmDataService>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+
         }
     }
 }

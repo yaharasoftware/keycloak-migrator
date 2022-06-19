@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Keycloak.Migrator.Models\Keycloak.Migrator.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Comparer\" />
+  </ItemGroup>
+
 </Project>

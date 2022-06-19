@@ -1,12 +1,10 @@
 ﻿using Keycloak.Migrator.DataServices.Interfaces;
 using Keycloak.Net;
 using Keycloak.Net.Models.Clients;
+using Keycloak.Net.Models.Groups;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Keycloak.Migrator.DataServices
 {

@@ -46,7 +46,7 @@ namespace Keycloak.Migrator.Models
         /// <value>
         /// The container identifier.
         /// </value>
-        public string ContainerId { get; set; }
+        public string? ContainerId { get; set; }
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
