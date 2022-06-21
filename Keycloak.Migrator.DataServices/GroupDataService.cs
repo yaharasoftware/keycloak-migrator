@@ -1,7 +1,7 @@
 ﻿using Keycloak.Migrator.DataServices.Interfaces;
 using Keycloak.Net;
 using Keycloak.Net.Models.Groups;
-using Keycloak.Net.Models.RealmsAdmin;
+using Keycloak.Net.Models.Roles;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -44,6 +44,21 @@ namespace Keycloak.Migrator.DataServices
         public async Task<bool> UpdateGroup(string realm, Group group)
         {
             return await _keycloakClient.UpdateGroupAsync(realm, group.Id, group);
+        }
+
+        public async Task<IEnumerable<Role>> GetGroupRoles(string realm, string clientId, string groupId)
+        {
+            return await _keycloakClient.GetClientRoleMappingsForGroupAsync(realm, groupId, clientId);
+        }
+
+        public async Task<bool> AddGroupRoles(string realm, string groupId, string clientId, IEnumerable<Role> roles)
+        {
+            return await _keycloakClient.AddClientRoleMappingsToGroupAsync(realm, groupId, clientId, roles);
+        }
+
+        public async Task<bool> DeleteGroupRoles(string realm, string groupId, string clientId, IEnumerable<Role> roles)
+        {
+            return await _keycloakClient.DeleteClientRoleMappingsFromGroupAsync(realm, groupId, clientId, roles);
         }
     }
 }

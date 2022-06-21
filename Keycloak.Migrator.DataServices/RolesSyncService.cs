@@ -61,11 +61,14 @@ namespace Keycloak.Migrator.DataServices
             // Get the updated list from keycloak.
             keycloakRoles = await _rolesDataService.GetRoles(realmExport.Id, clientIdentifier);
 
-            // Updated the description of the role within keycloak if different.
-            await this.UpdateChangedRoles(realmExport.Id, clientIdentifier, realmExportRoles, keycloakRoles);
-
             // Add missing roles.
             await this.AddMissingRoles(realmExport.Id, clientIdentifier, realmExportRoles, keycloakRoles);
+
+            // Get the updated list from keycloak.
+            keycloakRoles = await _rolesDataService.GetRoles(realmExport.Id, clientIdentifier);
+
+            // Updated the description of the role within keycloak if different.
+            await this.UpdateChangedRoles(realmExport.Id, clientIdentifier, realmExportRoles, keycloakRoles);
 
             // Get the updated list from keycloak.
             keycloakRoles = await _rolesDataService.GetRoles(realmExport.Id, clientIdentifier);
@@ -129,7 +132,6 @@ namespace Keycloak.Migrator.DataServices
             IEnumerable<Net.Models.Roles.Role> keycloakRoles)
         {
             _logger.LogInformation($"Adding missing roles...");
-
 
             List<Role> newRoles = exportRoles.Where(er => !keycloakRoles.Any(kr => kr.Name == er.Name)).ToList();
 
@@ -198,7 +200,7 @@ namespace Keycloak.Migrator.DataServices
 
             if (rolesToAdd.Count != roleNamesToAdd.Count)
             {
-                _logger.LogWarning($"The number of roles to add '{role.Name}' in client '{clientIdentifier}' does not match.");
+                _logger.LogWarning($"The names of roles to add to role '{role.Name}' in client '{clientIdentifier}' does not match.");
             }
 
             if (rolesToAdd.Count != 0)

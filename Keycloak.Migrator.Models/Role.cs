@@ -25,6 +25,7 @@ namespace Keycloak.Migrator.Models
         ///   <c>true</c> if [client role]; otherwise, <c>false</c>.
         /// </value>
         public bool ClientRole { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Role"/> is composite.
         /// </summary>

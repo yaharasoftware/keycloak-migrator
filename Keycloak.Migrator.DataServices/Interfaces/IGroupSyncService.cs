@@ -6,6 +6,6 @@ namespace Keycloak.Migrator.DataServices.Interfaces
 {
     public interface IGroupSyncService
     {
-        public Task<bool> SyncGroups(MigratorModel.RealmExport realmExport);
+        public Task<bool> SyncGroups(MigratorModel.RealmExport realmExport, string clientId);
     }
 }
