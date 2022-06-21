@@ -5,16 +5,19 @@ using System.Linq;
 
 namespace Keycloak.Migrator.DataServices.Interfaces
 {
+    /// <summary>
+    /// Group Data Service
+    /// </summary>
     public interface IGroupDataService
     {
         /// <summary>
         /// Gets the group roles.
         /// </summary>
         /// <param name="realm">The realm.</param>
-        /// <param name="clientId">The client identifier.</param>
+        /// <param name="clientIdentifier">The client identifier.</param>
         /// <param name="groupId">The group identifier.</param>
         /// <returns></returns>
-        Task<IEnumerable<Role>> GetGroupRoles(string realm, string clientId, string groupId);
+        Task<IEnumerable<Role>> GetGroupRoles(string realm, string clientIdentifier, string groupId);
 
         /// <summary>
         /// Adds the group.

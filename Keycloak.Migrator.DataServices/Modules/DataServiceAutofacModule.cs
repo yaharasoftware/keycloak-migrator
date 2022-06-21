@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace Keycloak.Migrator.DataServices.Modules
 {
+    /// <summary>
+    /// Data Service Autofac Module
+    /// </summary>
+    /// <seealso cref="Autofac.Module" />
     public class DataServiceAutofacModule : Autofac.Module
     {
+        /// <summary>
+        /// Loads the specified builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
         protected override void Load(ContainerBuilder builder)
         {
             builder

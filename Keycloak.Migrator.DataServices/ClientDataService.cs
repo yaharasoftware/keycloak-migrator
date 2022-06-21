@@ -8,10 +8,17 @@ using System.Linq;
 
 namespace Keycloak.Migrator.DataServices
 {
+    /// <summary>
+    /// Client Data Service against Keycloak.Net
+    /// TODO:  Replace Models with application specific models.
+    /// </summary>
+    /// <seealso cref="Keycloak.Migrator.DataServices.Interfaces.IClientDataService" />
     public class ClientDataService : IClientDataService
     {
+        #region Member Variables
         private readonly KeycloakClient _keycloakClient;
         private readonly ILogger<ClientDataService> _logger;
+        #endregion
 
         public ClientDataService(KeycloakClient keycloakClient,
             ILogger<ClientDataService> logger)
