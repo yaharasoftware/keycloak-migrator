@@ -2,9 +2,46 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+	<!--<TargetFramework>net6.0</TargetFramework>-->
+	<TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <Nullable>enable</Nullable>
+	<PackAsTool>true</PackAsTool>
+	<ToolCommandName>kc-migrate</ToolCommandName>
+	<PackageOutputPath>./nupkg</PackageOutputPath>
+	<Description>Updates Keycloak Roles and Groups based on an exsisting realm export.</Description>
+	<Copyright>2022</Copyright>
+	<PackageProjectUrl></PackageProjectUrl>
+	<Product>Keycloak Migrator</Product>
+	<Company>Yahara Software, LLC.</Company>
+	<Authors>Chad A. McKee</Authors>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>keycloak; migrator</PackageTags>
+	<RepositoryUrl>https://bitbucket.org/camckee/keycloak-migrator</RepositoryUrl>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <ItemGroup>

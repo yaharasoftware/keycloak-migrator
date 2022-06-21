@@ -1,6 +1,7 @@
 ﻿using Keycloak.Net.Models.Clients;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Keycloak.Migrator.DataServices.Interfaces
 {

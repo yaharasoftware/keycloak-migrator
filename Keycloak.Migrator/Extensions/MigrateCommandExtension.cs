@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Keycloak.Migrator.DataServices.Interfaces;
 using Keycloak.Migrator.Models;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.CommandLine;
+using System.IO;
 using System.Linq;
 
 namespace Keycloak.Migrator.Extensions

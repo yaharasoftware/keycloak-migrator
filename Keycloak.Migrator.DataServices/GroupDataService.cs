@@ -4,7 +4,9 @@ using Keycloak.Net.Models.Groups;
 using Keycloak.Net.Models.Roles;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Keycloak.Migrator.DataServices
 {

@@ -3,6 +3,7 @@ using Keycloak.Migrator.DataService.Test.Fixtures;
 using Keycloak.Migrator.DataServices;
 using Keycloak.Migrator.DataServices.Interfaces;
 using Keycloak.Migrator.Models;
+using Xunit;
 
 namespace Keycloak.Migrator.DataService.Test
 {

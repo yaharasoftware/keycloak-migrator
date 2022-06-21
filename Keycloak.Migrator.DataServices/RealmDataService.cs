@@ -3,6 +3,7 @@ using Keycloak.Net;
 using Keycloak.Net.Models.RealmsAdmin;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Keycloak.Migrator.DataServices
 {
