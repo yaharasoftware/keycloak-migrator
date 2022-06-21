@@ -40,42 +40,42 @@ namespace Keycloak.Migrator.DataServices
 
             }
 
-            if (realmExport.Id is null)
+            if (realmExport.Realm is null)
             {
                 _logger.LogError("RealmExport.Id is null");
                 return false;
             }
 
-            string? clientIdentifier = await this.GetClientId(realmExport.Id, clientId);
+            string? clientIdentifier = await this.GetClientId(realmExport.Realm, clientId);
 
 
             if (clientIdentifier is null)
             {
-                _logger.LogError($"Unable to locate identifier for client '{clientId}' and realm '{realmExport.Id}'");
+                _logger.LogError($"Unable to locate identifier for client '{clientId}' and realm '{realmExport.Realm}'");
                 return false;
             }
 
             List<Group> realmExportGroups = realmExport.Groups.ToList();
 
-            IEnumerable<Net.Models.Groups.Group> keycloakGroups = await _groupDataService.GetGroups(realmExport.Id);
+            IEnumerable<Net.Models.Groups.Group> keycloakGroups = await _groupDataService.GetGroups(realmExport.Realm);
 
             // Log the groups found in the system.
             _logger.LogInformation($"{keycloakGroups.Count()} groups found in keycloak.  {realmExportGroups.Count()} groups found in export.");
 
             // Remove groups that are no longer in the export if not associated with other realms or clients.
-            await this.DeleteMissingGroups(realmExport.Id, clientId, clientIdentifier, keycloakGroups, realmExportGroups);
+            await this.DeleteMissingGroups(realmExport.Realm, clientId, clientIdentifier, keycloakGroups, realmExportGroups);
 
             // Add new groups that are defined in the export.
-            await this.AddMissingGroups(realmExport.Id, clientId, clientIdentifier, keycloakGroups, realmExportGroups);
+            await this.AddMissingGroups(realmExport.Realm, clientId, clientIdentifier, keycloakGroups, realmExportGroups);
 
             // Retrieve the groups again.
-            keycloakGroups = await _groupDataService.GetGroups(realmExport.Id);
+            keycloakGroups = await _groupDataService.GetGroups(realmExport.Realm);
 
             //Update group path if needed.
-            await this.UpdateGroups(realmExport.Id, clientIdentifier, keycloakGroups, realmExportGroups);
+            await this.UpdateGroups(realmExport.Realm, clientIdentifier, keycloakGroups, realmExportGroups);
 
             //The group roles.
-            await this.UpdateGroupRoles(realmExport.Id, clientIdentifier, clientId, realmExportGroups, keycloakGroups);
+            await this.UpdateGroupRoles(realmExport.Realm, clientIdentifier, clientId, realmExportGroups, keycloakGroups);
 
             return true;
         }

@@ -35,18 +35,18 @@ namespace Keycloak.Migrator.DataServices
 
             }
 
-            if (realmExport.Id is null)
+            if (realmExport.Realm is null)
             {
                 _logger.LogError("RealmExport.Id is null");
                 return false;
             }
 
-            string? clientIdentifier = await this.GetClientId(realmExport.Id, clientId);
+            string? clientIdentifier = await this.GetClientId(realmExport.Realm, clientId);
 
 
             if (clientIdentifier is null)
             {
-                _logger.LogError($"Unable to locate identifier for client '{clientId}' and realm '{realmExport.Id}'");
+                _logger.LogError($"Unable to locate identifier for client '{clientId}' and realm '{realmExport.Realm}'");
                 return false;
             }
 
@@ -54,31 +54,31 @@ namespace Keycloak.Migrator.DataServices
             List<Role> realmExportRoles = realmExport.Roles.Client.ContainsKey(clientId) ? realmExport.Roles.Client[clientId] : new List<Role>();
 
             // Get the list of roles from keycloak.
-            IEnumerable<Net.Models.Roles.Role> keycloakRoles = await _rolesDataService.GetRoles(realmExport.Id, clientIdentifier);
+            IEnumerable<Net.Models.Roles.Role> keycloakRoles = await _rolesDataService.GetRoles(realmExport.Realm, clientIdentifier);
 
             // Log the roles found in the system.
             _logger.LogInformation($"{keycloakRoles.Count()} roles found in keycloak.  {realmExportRoles.Count()} roles found in export.");
 
             // Delete the roles from keycloak that are not in the export.
-            await this.DeleteMissingRoles(realmExport.Id, clientIdentifier, realmExportRoles, keycloakRoles);
+            await this.DeleteMissingRoles(realmExport.Realm, clientIdentifier, realmExportRoles, keycloakRoles);
 
             // Get the updated list from keycloak.
-            keycloakRoles = await _rolesDataService.GetRoles(realmExport.Id, clientIdentifier);
+            keycloakRoles = await _rolesDataService.GetRoles(realmExport.Realm, clientIdentifier);
 
             // Add missing roles.
-            await this.AddMissingRoles(realmExport.Id, clientIdentifier, realmExportRoles, keycloakRoles);
+            await this.AddMissingRoles(realmExport.Realm, clientIdentifier, realmExportRoles, keycloakRoles);
 
             // Get the updated list from keycloak.
-            keycloakRoles = await _rolesDataService.GetRoles(realmExport.Id, clientIdentifier);
+            keycloakRoles = await _rolesDataService.GetRoles(realmExport.Realm, clientIdentifier);
 
             // Updated the description of the role within keycloak if different.
-            await this.UpdateChangedRoles(realmExport.Id, clientIdentifier, realmExportRoles, keycloakRoles);
+            await this.UpdateChangedRoles(realmExport.Realm, clientIdentifier, realmExportRoles, keycloakRoles);
 
             // Get the updated list from keycloak.
-            keycloakRoles = await _rolesDataService.GetRoles(realmExport.Id, clientIdentifier);
+            keycloakRoles = await _rolesDataService.GetRoles(realmExport.Realm, clientIdentifier);
 
             // Update Composite Roles
-            await this.UpdateCompositeRoles(realmExport.Id, clientIdentifier, clientId, realmExportRoles, keycloakRoles);
+            await this.UpdateCompositeRoles(realmExport.Realm, clientIdentifier, clientId, realmExportRoles, keycloakRoles);
 
 
             return true;
