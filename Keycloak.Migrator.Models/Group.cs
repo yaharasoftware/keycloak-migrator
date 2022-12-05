@@ -13,6 +13,5 @@ namespace Keycloak.Migrator.Models
         public IList<string> RealmRoles { get; set; } = new List<string>();
         public IDictionary<string, IList<string>> ClientRoles { get; set; } = new Dictionary<string, IList<string>>();
         public IList<string> SubGroups { get; set; } = new List<string>();
-
     }
 }

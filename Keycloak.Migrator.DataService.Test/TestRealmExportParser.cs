@@ -23,6 +23,7 @@ namespace Keycloak.Migrator.DataService.Test
         [Fact]
         public async Task TestParseRealm()
         {
+            var x = Directory.GetCurrentDirectory();
             FileInfo fileInfo = new FileInfo(".\\realm-export.json");
 
             var realmDataParseJson = _fixture.Container.Resolve<IRealmDataParser>();
