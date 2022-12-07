@@ -12,13 +12,17 @@ public class Program
     {
         Logger? logger = LogManager.GetCurrentClassLogger();
 
-        logger.Info("Starting migrations application.");
+        logger.Info("Starting application.");
 
         try
         {
             var rootCommand = new RootCommand("Migrates Keycloak Realm.");
 
+            rootCommand.AddSynchronizeCommand();
+
             rootCommand.AddMigrateCommand();
+
+            rootCommand.AddValidateCommand();
 
             await rootCommand.InvokeAsync(args);
         }

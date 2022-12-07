@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace Keycloak.Migrator.Extensions
 {
-    internal static class MigrateCommandExtension
+    internal static class SynchronizeCommandExtension
     {
-        public static Command AddMigrateCommand(this Command command)
+        public static Command AddSynchronizeCommand(this Command command)
         {
 
             Option<Uri> keycloakUri = new Option<Uri>(
@@ -45,9 +45,9 @@ namespace Keycloak.Migrator.Extensions
                 IsRequired = true,
             };
 
-            Option<FileInfo?> keycloakJsonMigration = new Option<FileInfo?>(
-                name: "--keycloak-json-migration",
-                description: "The path to the json migration.",
+            Option<FileInfo?> keycloakRealmExport = new Option<FileInfo?>(
+                name: "--keycloak-realm-export",
+                description: "The path to the realm export.",
                 parseArgument: result =>
                 {
                     if (result.Tokens.Count == 0)
@@ -71,23 +71,23 @@ namespace Keycloak.Migrator.Extensions
                 IsRequired = true,
             };
 
-            Command migrate = new Command("migrate", "Migrate the roles and groups to match the realm export.");
+            Command synchronize = new Command("synchronize", "Synchronize the roles and groups to match the realm export.");
 
-            migrate.AddOption(keycloakUri);
-            migrate.AddOption(keycloakPassword);
-            migrate.AddOption(keycloakUserName);
-            migrate.AddOption(keycloakJsonMigration);
-            migrate.AddOption(keycloakClientId);
+            synchronize.AddOption(keycloakUri);
+            synchronize.AddOption(keycloakPassword);
+            synchronize.AddOption(keycloakUserName);
+            synchronize.AddOption(keycloakRealmExport);
+            synchronize.AddOption(keycloakClientId);
 
-            migrate.SetHandler(async (uri,
+            synchronize.SetHandler(async (uri,
                                    password,
                                    userName,
-                                   jsonMigrationFile,
+                                   realmExportFile,
                                    clientId) =>
             {
-                if (jsonMigrationFile == null)
+                if (realmExportFile == null)
                 {
-                    throw new ArgumentNullException(nameof(jsonMigrationFile));
+                    throw new ArgumentNullException(nameof(realmExportFile));
                 }
 
                 using var serviceProvider = ServiceProviderFactory.CreateServiceProvider(new KeycloakCredentials()
@@ -98,22 +98,24 @@ namespace Keycloak.Migrator.Extensions
                 }, containerBuilder: null);
 
                 IDataParser dataParser = serviceProvider.Resolve<IDataParser>();
-                IRoleMigrationService roleMigrationService = serviceProvider.Resolve<IRoleMigrationService>();
-                IUserMigrationService userMigrationService = serviceProvider.Resolve<IUserMigrationService>();
+                IRolesSyncService rolesSyncService = serviceProvider.Resolve<IRolesSyncService>();
+                IGroupSyncService groupSyncService = serviceProvider.Resolve<IGroupSyncService>();
+                IUserSyncService userSyncService = serviceProvider.Resolve<IUserSyncService>();
 
-                ImportMigrationDataJSON? jsonMigrationData = await dataParser.ParseMigrationJSON(jsonMigrationFile);
+                RealmExport? realmExport = await dataParser.ParseRealmExport(realmExportFile);
 
-                if (jsonMigrationData == null)
+                if (realmExport == null)
                 {
-                    throw new ArgumentNullException(nameof(jsonMigrationData));
+                    throw new ArgumentNullException(nameof(realmExport));
                 }
 
-                await roleMigrationService.MigrateRoles(jsonMigrationData);
-                await userMigrationService.MigrateUsers(jsonMigrationData);
+                await rolesSyncService.SyncRoles(realmExport, clientId);
+                await groupSyncService.SyncGroups(realmExport, clientId);
+                await userSyncService.SyncUsers(realmExport);
 
-            }, keycloakUri, keycloakPassword, keycloakUserName, keycloakJsonMigration, keycloakClientId);
+            }, keycloakUri, keycloakPassword, keycloakUserName, keycloakRealmExport, keycloakClientId);
 
-            command.AddCommand(migrate);
+            command.AddCommand(synchronize);
 
             return command;
         }

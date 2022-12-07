@@ -2,7 +2,7 @@
   "profiles": {
     "Keycloak.Migrator": {
       "commandName": "Project",
-      "commandLineArgs": "migrate --keycloak-url=\"http://localhost:10083\" --keycloak-password=22E!crLsRcZL0kN --keycloak-username=realm-sync-account --keycloak-realm-export=\"C:\\Users\\chadm\\Projects\\Keycloak.Migrator\\realm-export.json\" --keycloak-client-id=ratemaker"
+      "commandLineArgs": "migrate --keycloak-url=\"http://localhost:8080\" --keycloak-password=admin --keycloak-username=admin --keycloak-json-migration=\"C:\\Repos\\roles.json\" --keycloak-client-id=master"
     }
   }
 }
