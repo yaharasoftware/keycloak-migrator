@@ -100,6 +100,7 @@ namespace Keycloak.Migrator.Extensions
                 IRealmDataParser dataParser = serviceProvider.Resolve<IRealmDataParser>();
                 IRolesSyncService rolesSyncService = serviceProvider.Resolve<IRolesSyncService>();
                 IGroupSyncService groupSyncService = serviceProvider.Resolve<IGroupSyncService>();
+                IUserSyncService userSyncService = serviceProvider.Resolve<IUserSyncService>();
 
                 RealmExport? realmExport = await dataParser.ParseRealmExport(realmExportFile);
 
@@ -110,6 +111,7 @@ namespace Keycloak.Migrator.Extensions
 
                 await rolesSyncService.SyncRoles(realmExport, clientId);
                 await groupSyncService.SyncGroups(realmExport, clientId);
+                await userSyncService.SyncUsers(realmExport);
 
             }, keycloakUri, keycloakPassword, keycloakUserName, keycloakRealmExport, keycloakClientId);
 

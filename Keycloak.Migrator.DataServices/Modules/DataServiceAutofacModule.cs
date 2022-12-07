@@ -54,6 +54,16 @@ namespace Keycloak.Migrator.DataServices.Modules
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder
+               .RegisterType<UserSyncService>()
+               .AsImplementedInterfaces()
+               .SingleInstance();
+
+            builder
+               .RegisterType<UserDataService>()
+               .AsImplementedInterfaces()
+               .SingleInstance();
+
 
         }
     }
