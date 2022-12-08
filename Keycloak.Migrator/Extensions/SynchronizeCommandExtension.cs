@@ -45,6 +45,14 @@ namespace Keycloak.Migrator.Extensions
                 IsRequired = true,
             };
 
+            Option<bool> deleteMissingUsers = new Option<bool>(
+                "--delete-missing-users",
+                "If flag is set, delete users that are in the realm but not the export"
+            )
+            {
+                IsRequired = false,
+            };
+
             Option<FileInfo?> keycloakRealmExport = new Option<FileInfo?>(
                 name: "--keycloak-realm-export",
                 description: "The path to the realm export.",
@@ -78,12 +86,14 @@ namespace Keycloak.Migrator.Extensions
             synchronize.AddOption(keycloakUserName);
             synchronize.AddOption(keycloakRealmExport);
             synchronize.AddOption(keycloakClientId);
+            synchronize.AddOption(deleteMissingUsers);
 
             synchronize.SetHandler(async (uri,
                                    password,
                                    userName,
                                    realmExportFile,
-                                   clientId) =>
+                                   clientId,
+                                   deleteMissingUsers) =>
             {
                 if (realmExportFile == null)
                 {
@@ -111,9 +121,9 @@ namespace Keycloak.Migrator.Extensions
 
                 await rolesSyncService.SyncRoles(realmExport, clientId);
                 await groupSyncService.SyncGroups(realmExport, clientId);
-                await userSyncService.SyncUsers(realmExport, userName);
+                await userSyncService.SyncUsers(realmExport, userName, deleteMissingUsers);
 
-            }, keycloakUri, keycloakPassword, keycloakUserName, keycloakRealmExport, keycloakClientId);
+            }, keycloakUri, keycloakPassword, keycloakUserName, keycloakRealmExport, keycloakClientId, deleteMissingUsers);
 
             command.AddCommand(synchronize);
 

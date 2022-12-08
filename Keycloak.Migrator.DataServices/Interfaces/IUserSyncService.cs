@@ -15,6 +15,6 @@ namespace Keycloak.Migrator.DataServices.Interfaces
         /// </summary>
         /// <param name="realmExport">The realm export.</param>
         /// <returns></returns>
-        public Task<bool> SyncUsers(MigratorModel.RealmExport realmExport, string loginUser);
+        public Task<bool> SyncUsers(MigratorModel.RealmExport realmExport, string loginUser, bool deleteMissingUsers);
     }
 }

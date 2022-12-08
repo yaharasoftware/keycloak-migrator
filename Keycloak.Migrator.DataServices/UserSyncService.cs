@@ -12,17 +12,15 @@ namespace Keycloak.Migrator.DataServices
     {
         private readonly ILogger<UserSyncService> _logger;
         private readonly IUserDataService _userDataService;
-        private readonly IClientDataService _clientDataService;
         public UserSyncService(IUserDataService userDataService,
             IClientDataService clientDataService,
             ILogger<UserSyncService> logger)
         {
-            _clientDataService = clientDataService;
             _userDataService = userDataService;
             _logger = logger;
         }
 
-        public async Task<bool> SyncUsers(RealmExport realmExport, string loginUser)
+        public async Task<bool> SyncUsers(RealmExport realmExport, string loginUser, bool deleteMissingUsers)
         {
             if (realmExport is null)
             {
@@ -44,11 +42,14 @@ namespace Keycloak.Migrator.DataServices
             // Log the users found in the system.
             _logger.LogInformation($"{keycloakUsers.Count()} users found in keycloak.  {realmExportUsers.Count()} users found in export.");
 
-            // Delete the users from keycloak that are not in the export.
-            await this.DeleteMissingUsers(realmExport.Realm, realmExportUsers, keycloakUsers, loginUser);
+            if (deleteMissingUsers)
+            {
+                // Delete the users from keycloak that are not in the export.
+                await this.DeleteMissingUsers(realmExport.Realm, realmExportUsers, keycloakUsers, loginUser);
 
-            // Get the updated list from keycloak.
-            keycloakUsers = await _userDataService.GetUsers(realmExport.Realm);
+                // Get the updated list from keycloak.
+                keycloakUsers = await _userDataService.GetUsers(realmExport.Realm);
+            }
 
             // Add missing users.
             await this.AddMissingUsers(realmExport.Realm, realmExportUsers, keycloakUsers);
