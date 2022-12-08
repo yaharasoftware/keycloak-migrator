@@ -111,7 +111,7 @@ namespace Keycloak.Migrator.Extensions
 
                 await rolesSyncService.SyncRoles(realmExport, clientId);
                 await groupSyncService.SyncGroups(realmExport, clientId);
-                await userSyncService.SyncUsers(realmExport);
+                await userSyncService.SyncUsers(realmExport, userName);
 
             }, keycloakUri, keycloakPassword, keycloakUserName, keycloakRealmExport, keycloakClientId);
 

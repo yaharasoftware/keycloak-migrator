@@ -22,7 +22,7 @@ namespace Keycloak.Migrator.DataServices
             _logger = logger;
         }
 
-        public async Task<bool> SyncUsers(RealmExport realmExport)
+        public async Task<bool> SyncUsers(RealmExport realmExport, string loginUser)
         {
             if (realmExport is null)
             {
@@ -45,7 +45,7 @@ namespace Keycloak.Migrator.DataServices
             _logger.LogInformation($"{keycloakUsers.Count()} users found in keycloak.  {realmExportUsers.Count()} users found in export.");
 
             // Delete the users from keycloak that are not in the export.
-            await this.DeleteMissingUsers(realmExport.Realm, realmExportUsers, keycloakUsers);
+            await this.DeleteMissingUsers(realmExport.Realm, realmExportUsers, keycloakUsers, loginUser);
 
             // Get the updated list from keycloak.
             keycloakUsers = await _userDataService.GetUsers(realmExport.Realm);
@@ -88,11 +88,17 @@ namespace Keycloak.Migrator.DataServices
 
         private async Task DeleteMissingUsers(string realm,
             IEnumerable<User> realmExportUsers,
-            IEnumerable<Net.Models.Users.User> keycloakUsers)
+            IEnumerable<Net.Models.Users.User> keycloakUsers,
+            string loginUser)
         {
-            _logger.LogInformation("Checking for roles to delete...");
+            _logger.LogInformation("Checking for users to delete...");
             foreach (Net.Models.Users.User keycloakUser in keycloakUsers)
             {
+                if (keycloakUser.UserName == loginUser)
+                {
+                    _logger.LogWarning("Login user was not in realm export - ignoring expected deletion.");
+                    continue;
+                }
                 if (!realmExportUsers.Any(x => x.UserName == keycloakUser.UserName))
                 {
                     _logger.LogInformation($"Deleting user '{keycloakUser.UserName}' in realm '{realm}'");
