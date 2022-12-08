@@ -25,7 +25,7 @@ namespace Keycloak.Migrator.DataService.Test
         {
             FileInfo fileInfo = new FileInfo(".\\realm-export.json");
 
-            var realmDataParseJson = _fixture.Container.Resolve<IRealmDataParser>();
+            var realmDataParseJson = _fixture.Container.Resolve<IDataParser>();
 
             RealmExport? realmExport = await realmDataParseJson.ParseRealmExport(fileInfo);
 

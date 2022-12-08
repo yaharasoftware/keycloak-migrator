@@ -44,6 +44,13 @@ namespace Keycloak.Migrator.DataServices.Interfaces
         /// Gets the roles.
         /// </summary>
         /// <param name="realm">The realm.</param>
+        /// <returns></returns>
+        public Task<IEnumerable<Role>> GetRoles(string realm);
+
+        /// <summary>
+        /// Gets the roles.
+        /// </summary>
+        /// <param name="realm">The realm.</param>
         /// <param name="clientIdentifier">The client identifier.</param>
         /// <returns></returns>
         public Task<IEnumerable<Role>> GetRoles(string realm, string clientIdentifier);
@@ -72,5 +79,13 @@ namespace Keycloak.Migrator.DataServices.Interfaces
         /// <param name="role">The role.</param>
         /// <returns></returns>
         public Task<bool> AddRole(string realm, string clientId, Role role);
+
+        /// <summary>
+        /// Adds the role.
+        /// </summary>
+        /// <param name="realm">The realm.</param>
+        /// <param name="role">The role.</param>
+        /// <returns></returns>
+        public Task<bool> AddRole(string realm, Role role);
     }
 }

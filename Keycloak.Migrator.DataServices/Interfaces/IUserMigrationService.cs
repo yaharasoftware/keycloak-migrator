@@ -1,0 +1,19 @@
+﻿using Keycloak.Migrator.Models;
+using Keycloak.Net.Models.Roles;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Keycloak.Migrator.DataServices.Interfaces
+{
+    /// <summary>
+    /// Roles Data Service
+    /// </summary>
+    public interface IUserMigrationService
+    {
+        public Task<bool> MigrateUsers(ImportMigrationDataJSON jsonData);
+
+        public Task<bool> ValidateUsers(ImportMigrationDataJSON jsonData);
+    }
+}

@@ -40,5 +40,10 @@ namespace Keycloak.Migrator.DataServices
         {
             return await _keycloakClient.UpdateUserAsync(realm, user.Id, user);
         }
+
+        public async Task<bool> UpdateUserRoles(string realm, User user, IEnumerable<Role> roles)
+        {
+            return await _keycloakClient.AddRealmRoleMappingsToUserAsync(realm, user.Id, roles);
+        }
     }
 }

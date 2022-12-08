@@ -11,7 +11,7 @@ namespace Keycloak.Migrator.DataServices.Interfaces
     /// <summary>
     /// Realm Export Data Parser
     /// </summary>
-    public interface IRealmDataParser
+    public interface IDataParser
     {
         /// <summary>
         /// Parses the realm export.
@@ -19,5 +19,12 @@ namespace Keycloak.Migrator.DataServices.Interfaces
         /// <param name="realmExportFile">The realm export file.</param>
         /// <returns></returns>
         Task<RealmExport?> ParseRealmExport(FileInfo realmExportFile);
+
+        /// <summary>
+        /// Parses the migration JSON
+        /// </summary>
+        /// <param name="jsonMigrationFile"></param>
+        /// <returns></returns>
+        Task<ImportMigrationDataJSON?> ParseMigrationJSON(FileInfo jsonMigrationFile);
     }
 }

@@ -42,5 +42,14 @@ namespace Keycloak.Migrator.DataServices.Interfaces
         /// <param name="user">The user.</param>
         /// <returns></returns>
         public Task<bool> AddUser(string realm, User user);
+
+        /// <summary>
+        /// Add Roles to User
+        /// </summary>
+        /// <param name="realm"></param>
+        /// <param name="user"></param>
+        /// <param name="roles"></param>
+        /// <returns></returns>
+        public Task<bool> UpdateUserRoles(string realm, User user, IEnumerable<Role> roles);
     }
 }

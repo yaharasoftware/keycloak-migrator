@@ -20,7 +20,7 @@ namespace Keycloak.Migrator.DataServices.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<RealmDataParseJson>()
+                .RegisterType<DataParseJson>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -61,6 +61,16 @@ namespace Keycloak.Migrator.DataServices.Modules
 
             builder
                .RegisterType<UserDataService>()
+               .AsImplementedInterfaces()
+               .SingleInstance();
+
+            builder
+               .RegisterType<RoleMigrationService>()
+               .AsImplementedInterfaces()
+               .SingleInstance();
+
+            builder
+               .RegisterType<UserMigrationService>()
                .AsImplementedInterfaces()
                .SingleInstance();
 
