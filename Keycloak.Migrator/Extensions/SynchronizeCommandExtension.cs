@@ -47,6 +47,7 @@ namespace Keycloak.Migrator.Extensions
 
             Option<bool> deleteMissingUsers = new Option<bool>(
                 "--delete-missing-users",
+                () => false,
                 "If flag is set, delete users that are in the realm but not the export"
             )
             {
@@ -79,7 +80,7 @@ namespace Keycloak.Migrator.Extensions
                 IsRequired = true,
             };
 
-            Command synchronize = new Command("synchronize", "Synchronize the roles and groups to match the realm export.");
+            Command synchronize = new Command("synchronize", "Synchronize the roles, groups, and users to match the realm export.");
 
             synchronize.AddOption(keycloakUri);
             synchronize.AddOption(keycloakPassword);

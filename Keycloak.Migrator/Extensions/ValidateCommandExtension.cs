@@ -71,7 +71,7 @@ namespace Keycloak.Migrator.Extensions
                 IsRequired = true,
             };
 
-            Command validate = new Command("validate", "Validate the roles and groups from JSON File.");
+            Command validate = new Command("validate", "Validate the roles and users from JSON File.");
 
             validate.AddOption(keycloakUri);
             validate.AddOption(keycloakPassword);

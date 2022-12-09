@@ -1,4 +1,5 @@
-﻿using Keycloak.Migrator.DataServices.Interfaces;
+﻿using AutoMapper;
+using Keycloak.Migrator.DataServices.Interfaces;
 using Keycloak.Migrator.Models;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,12 +13,15 @@ namespace Keycloak.Migrator.DataServices
     {
         private readonly ILogger<UserSyncService> _logger;
         private readonly IUserDataService _userDataService;
+        private readonly IMapper _mapper;
         public UserSyncService(IUserDataService userDataService,
             IClientDataService clientDataService,
+            IMapper mapper,
             ILogger<UserSyncService> logger)
         {
             _userDataService = userDataService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<bool> SyncUsers(RealmExport realmExport, string loginUser, bool deleteMissingUsers)
@@ -75,12 +79,14 @@ namespace Keycloak.Migrator.DataServices
                     continue;
                 }
 
-                //Do First Name as POC - If we want additional functionality for update, add later
-                if (realmExportUser.FirstName != existingUser.FirstName)
+                if (realmExportUser.FirstName != existingUser.FirstName || realmExportUser.LastName != existingUser.LastName || realmExportUser.Email != existingUser.Email)
                 {
-                    _logger.LogInformation($"Updating first name for user '{existingUser.UserName}'");
+                    _logger.LogInformation($"Updating attributes for user '{existingUser.UserName}'");
 
                     existingUser.FirstName = realmExportUser.FirstName;
+                    existingUser.LastName = realmExportUser.LastName;
+                    existingUser.Email = realmExportUser.Email;
+
                     await _userDataService.UpdateUser(realm, existingUser);
                 }
 
@@ -121,13 +127,7 @@ namespace Keycloak.Migrator.DataServices
                 _logger.LogInformation($"Adding role '{user.UserName}' in realm '{realm}'");
 
                 //TODO: All attributes needed?
-                Net.Models.Users.User newUser = new Net.Models.Users.User
-                {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                };
+                var newUser = _mapper.Map<Net.Models.Users.User>(user);
 
                 await _userDataService.AddUser(realm, newUser);
             }
