@@ -11,7 +11,9 @@
     	"first_name": "Testy",
 		"last_name": "McTesterson",
     	"email": "test@yaharasoftware.com",
-		"roles": []
+		"roles": [],
+		"password": "test",
+		"temporary_password": "true"
     }],
 "user_role_additions": [
     {

@@ -128,7 +128,6 @@ namespace Keycloak.Migrator.DataServices
 
                 //TODO: All attributes needed?
                 var newUser = _mapper.Map<Net.Models.Users.User>(user);
-
                 await _userDataService.AddUser(realm, newUser);
             }
 

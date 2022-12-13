@@ -5,7 +5,7 @@ for /F %%I in ('curl http://localhost:8080/auth/health') do set response=%%I
 echo %response%
 ::Success is when response becomes } due to multiline issues, otherwise curl returns nothing
 if NOT "%response%" == "}" (
-	timeout /t 2
+	timeout /t 5
 	goto loop
 )
 

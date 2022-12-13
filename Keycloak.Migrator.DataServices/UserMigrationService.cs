@@ -46,8 +46,18 @@ namespace Keycloak.Migrator.DataServices
                         _logger.LogInformation($"Added user '{user.UserName}' in realm '{jsonData.Realm}'");
                     }
 
-                    //Add Roles
                     //Get User - for ID
+                    existingUsers = await _userDataService.GetUsers(jsonData.Realm);
+
+                    success = await _userDataService.SetUserPassword(jsonData.Realm, existingUsers.First(u => u.UserName == user.UserName), user.Password, user.TemporaryPassword);
+
+                    if (success)
+                    {
+                        _logger.LogInformation($"Set password for user '{user.UserName}' in realm '{jsonData.Realm}'");
+                    }
+
+                    //Add Roles
+                    //Get User - for up to date information
                     existingUsers = await _userDataService.GetUsers(jsonData.Realm);
 
                     success = await _userDataService.UpdateUserRoles(jsonData.Realm, existingUsers.First(u => u.UserName == user.UserName), roles.Where(r => user.Roles.Contains(r.Name)));

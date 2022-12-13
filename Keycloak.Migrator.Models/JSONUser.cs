@@ -54,5 +54,13 @@ namespace Keycloak.Migrator.Models
         /// The Roles.
         /// </value>
         public List<string> Roles { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Password to set for the user
+        /// </summary>
+        public string Password { get; set; } = string.Empty;
+
+        [JsonProperty("temporary_password")]
+        public bool TemporaryPassword { get; set; } = true;
     }
 }

@@ -70,10 +70,8 @@ namespace Keycloak.Migrator
 
             builder.Register<IMapper>(_ =>
             {
-                var services = new ServiceCollection();
-                services.AddAutoMapper(typeof(MappingProfile));
-                var provider = services.BuildServiceProvider();
-                return provider.GetRequiredService<IMapper>();
+                MapperConfiguration mapperConfiguration = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
+                return mapperConfiguration.CreateMapper();
             }).SingleInstance();
 
             IContainer container = builder.Build();
