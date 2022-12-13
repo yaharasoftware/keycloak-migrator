@@ -25,6 +25,11 @@ namespace Keycloak.Migrator.DataServices
             return await _keycloakClient.CreateRoleAsync(realm, clientId, role);
         }
 
+        public async Task<bool> AddRole(string realm, Role role)
+        {
+            return await _keycloakClient.CreateRoleAsync(realm, role);
+        }
+
         public async Task<bool> DeleteRole(string realm, Role role)
         {
             return await _keycloakClient.DeleteRoleByIdAsync(realm, role.Id);
@@ -33,6 +38,12 @@ namespace Keycloak.Migrator.DataServices
         public async Task<IEnumerable<Role>> GetRoles(string realm, string clientId)
         {
             IEnumerable<Role> roles = await _keycloakClient.GetRolesAsync(realm, clientId);
+            return roles;
+        }
+
+        public async Task<IEnumerable<Role>> GetRoles(string realm)
+        {
+            IEnumerable<Role> roles = await _keycloakClient.GetRolesAsync(realm);
             return roles;
         }
 

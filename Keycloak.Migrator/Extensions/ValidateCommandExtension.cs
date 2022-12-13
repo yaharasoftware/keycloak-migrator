@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace Keycloak.Migrator.Extensions
 {
-    internal static class MigrateCommandExtension
+    internal static class ValidateCommandExtension
     {
-        public static Command AddMigrateCommand(this Command command)
+        public static Command AddValidateCommand(this Command command)
         {
 
             Option<Uri> keycloakUri = new Option<Uri>(
@@ -71,15 +71,15 @@ namespace Keycloak.Migrator.Extensions
                 IsRequired = true,
             };
 
-            Command migrate = new Command("migrate", "Migrate the roles and groups to match the realm export.");
+            Command validate = new Command("validate", "Validate the roles and users from JSON File.");
 
-            migrate.AddOption(keycloakUri);
-            migrate.AddOption(keycloakPassword);
-            migrate.AddOption(keycloakUserName);
-            migrate.AddOption(keycloakJsonMigration);
-            migrate.AddOption(keycloakClientId);
+            validate.AddOption(keycloakUri);
+            validate.AddOption(keycloakPassword);
+            validate.AddOption(keycloakUserName);
+            validate.AddOption(keycloakJsonMigration);
+            validate.AddOption(keycloakClientId);
 
-            migrate.SetHandler(async (uri,
+            validate.SetHandler(async (uri,
                                    password,
                                    userName,
                                    jsonMigrationFile,
@@ -108,12 +108,12 @@ namespace Keycloak.Migrator.Extensions
                     throw new ArgumentNullException(nameof(jsonMigrationData));
                 }
 
-                await roleMigrationService.MigrateRoles(jsonMigrationData);
-                await userMigrationService.MigrateUsers(jsonMigrationData);
+                await roleMigrationService.ValidateRoles(jsonMigrationData);
+                await userMigrationService.ValidateUsers(jsonMigrationData);
 
             }, keycloakUri, keycloakPassword, keycloakUserName, keycloakJsonMigration, keycloakClientId);
 
-            command.AddCommand(migrate);
+            command.AddCommand(validate);
 
             return command;
         }

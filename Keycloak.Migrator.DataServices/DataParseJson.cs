@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Keycloak.Migrator.DataServices
 {
-    public class RealmDataParseJson : IRealmDataParser
+    public class DataParseJson : IDataParser
     {
-        private readonly ILogger<RealmDataParseJson> _logger;
+        private readonly ILogger<DataParseJson> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RealmDataParseJson"/> class.
+        /// Initializes a new instance of the <see cref="DataParseJson"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public RealmDataParseJson(ILogger<RealmDataParseJson> logger)
+        public DataParseJson(ILogger<DataParseJson> logger)
         {
             _logger = logger;
         }
@@ -48,6 +48,34 @@ namespace Keycloak.Migrator.DataServices
             }
 
             return Newtonsoft.Json.JsonConvert.DeserializeObject<RealmExport>(readAllText);
+        }
+
+        /// <summary>
+        /// Parses the migration JSON
+        /// </summary>
+        /// <param name="jsonMigrationFile"></param>
+        /// <returns></returns>
+        public async Task<ImportMigrationDataJSON?> ParseMigrationJSON(FileInfo jsonMigrationFile)
+        {
+            if (jsonMigrationFile is null)
+            {
+                throw new ArgumentNullException(nameof(jsonMigrationFile));
+            }
+
+            if (!jsonMigrationFile.Exists)
+            {
+                throw new FileNotFoundException();
+            }
+
+            string readAllText = await File.ReadAllTextAsync(jsonMigrationFile.FullName);
+
+            if (string.IsNullOrEmpty(readAllText))
+            {
+                _logger.LogWarning("The file provided as the realm export is empty.");
+                return null;
+            }
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ImportMigrationDataJSON>(readAllText);
         }
     }
 }
