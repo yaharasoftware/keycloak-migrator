@@ -6,7 +6,7 @@ IF NOT "%1"=="" (
 		SET VERSION_NUMBER=%~2
 		SHIFT
 	)
-	IF "%1"=="-apikey" (
+	IF "%1"=="-apiKey" (
 		SET API_KEY=%~2
 		SHIFT
 	)
@@ -19,9 +19,8 @@ IF NOT "%1"=="" (
 )
 
 IF "%VERSION_NUMBER%"=="" SET VERSION_NUMBER=1.0.0
-IF "%"=="API_KEY" SET API_KEY=
+IF "%API_KEY%"=="" SET API_KEY=
 IF "%SOURCE%"=="" SET SOURCE=
 
-
-dotnet pack -p:PackageVersion=%VERSION_NUMBER% Keycloak.Migrator/Keycloak.Migrator.csproj -c Release
-REM nuget push Keycloak.Migrator/nupkg/Keycloak.Migrator.%VERSION_NUMBER%.nupkg %API_KEY% -Source %SOURCE%
+CALL dotnet pack -p:PackageVersion=%VERSION_NUMBER% -p:AssemblyVersion=%VERSION_NUMBER% -p:Version=%VERSION_NUMBER% Keycloak.Migrator/Keycloak.Migrator.csproj -c Release
+CALL dotnet nuget push Keycloak.Migrator/nupkg/Keycloak.Migrator.%VERSION_NUMBER%.nupkg --api-key %API_KEY% --source %SOURCE%
