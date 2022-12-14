@@ -10,6 +10,8 @@ using NLog.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
+using AutoMapper;
+using Keycloak.Migrator.AutoMapper;
 
 namespace Keycloak.Migrator
 {
@@ -64,6 +66,13 @@ namespace Keycloak.Migrator
                 });
 
             builder.Populate(loggingConfigurations);
+
+
+            builder.Register<IMapper>(_ =>
+            {
+                MapperConfiguration mapperConfiguration = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
+                return mapperConfiguration.CreateMapper();
+            }).SingleInstance();
 
             IContainer container = builder.Build();
 

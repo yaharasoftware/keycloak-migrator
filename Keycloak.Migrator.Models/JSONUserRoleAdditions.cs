@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,12 +13,13 @@ namespace Keycloak.Migrator.Models
     public class JSONUserRoleAdditions
     {
         /// <summary>
-        /// Gets or sets the Email
+        /// Gets or sets the UserName
         /// </summary>
         /// <value>
         /// The name.
         /// </value>
-        public string Email { get; set; } = string.Empty;
+        [JsonProperty("user_name")]
+        public string UserName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the Roles.

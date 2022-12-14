@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,8 @@ namespace Keycloak.Migrator.Models
         /// <value>
         /// The name.
         /// </value>
-        public string User_name { get; set; } = string.Empty;
+        [JsonProperty("user_name")]
+        public string UserName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the First name.
@@ -25,7 +27,8 @@ namespace Keycloak.Migrator.Models
         /// <value>
         /// The name.
         /// </value>
-        public string First_name { get; set; } = string.Empty;
+        [JsonProperty("first_name")]
+        public string FirstName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the Last name.
@@ -33,7 +36,8 @@ namespace Keycloak.Migrator.Models
         /// <value>
         /// The name.
         /// </value>
-        public string Last_name { get; set; } = string.Empty;
+        [JsonProperty("last_name")]
+        public string LastName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the Email
@@ -50,5 +54,13 @@ namespace Keycloak.Migrator.Models
         /// The Roles.
         /// </value>
         public List<string> Roles { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Password to set for the user
+        /// </summary>
+        public string Password { get; set; } = string.Empty;
+
+        [JsonProperty("temporary_password")]
+        public bool TemporaryPassword { get; set; } = true;
     }
 }

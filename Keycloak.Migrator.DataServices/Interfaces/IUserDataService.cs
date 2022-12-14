@@ -51,5 +51,15 @@ namespace Keycloak.Migrator.DataServices.Interfaces
         /// <param name="roles"></param>
         /// <returns></returns>
         public Task<bool> UpdateUserRoles(string realm, User user, IEnumerable<Role> roles);
+
+        /// <summary>
+        /// Set the user password - temporary or not
+        /// </summary>
+        /// <param name="realm"></param>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="temporary"></param>
+        /// <returns></returns>
+        public Task<bool> SetUserPassword(string realm, User user, string password, bool temporary = true);
     }
 }

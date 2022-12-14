@@ -1,4 +1,5 @@
-﻿using Keycloak.Migrator.DataServices.Interfaces;
+﻿using AutoMapper;
+using Keycloak.Migrator.DataServices.Interfaces;
 using Keycloak.Migrator.Models;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,14 +14,16 @@ namespace Keycloak.Migrator.DataServices
         private readonly ILogger<UserMigrationService> _logger;
         private readonly IUserDataService _userDataService;
         private readonly IRolesDataService _roleDataService;
-        //private readonly IRolesDataService
+        private readonly IMapper _mapper;
         public UserMigrationService(IUserDataService userDataService,
             IRolesDataService roleDataService,
+            IMapper mapper,
             ILogger<UserMigrationService> logger)
         {
             _userDataService = userDataService;
             _logger = logger;
             _roleDataService = roleDataService;
+            _mapper = mapper;
         }
 
         public async Task<bool> MigrateUsers(ImportMigrationDataJSON jsonData)
@@ -31,46 +34,50 @@ namespace Keycloak.Migrator.DataServices
             foreach (var user in jsonData.Users)
             {
                 //If the User doesn't exist in existing Users
-                if(!existingUsers.Any(r => r.Email == user.Email))
+                if(!existingUsers.Any(r => r.UserName == user.UserName))
                 {
-                    var userSync = new Net.Models.Users.User()
-                    {
-                        UserName = user.User_name,
-                        FirstName = user.First_name,
-                        LastName = user.Last_name,
-                        Email = user.Email,
-                        Enabled = true
-                    };
+                    var userSync = _mapper.Map<Net.Models.Users.User>(user);
+
                     //Create User
                     var success = await _userDataService.AddUser(jsonData.Realm, userSync);
 
                     if (success)
                     {
-                        _logger.LogInformation($"Added user '{user.Email}' in realm '{jsonData.Realm}'");
+                        _logger.LogInformation($"Added user '{user.UserName}' in realm '{jsonData.Realm}'");
                     }
 
-                    //Add Roles
                     //Get User - for ID
                     existingUsers = await _userDataService.GetUsers(jsonData.Realm);
 
-                    success = await _userDataService.UpdateUserRoles(jsonData.Realm, existingUsers.First(u => u.UserName == user.User_name), roles.Where(r => user.Roles.Contains(r.Name)));
+                    success = await _userDataService.SetUserPassword(jsonData.Realm, existingUsers.First(u => u.UserName == user.UserName), user.Password, user.TemporaryPassword);
 
                     if (success)
                     {
-                        _logger.LogInformation($"Added roles to user '{user.Email}' in realm '{jsonData.Realm}'");
+                        _logger.LogInformation($"Set password for user '{user.UserName}' in realm '{jsonData.Realm}'");
+                    }
+
+                    //Add Roles
+                    //Get User - for up to date information
+                    existingUsers = await _userDataService.GetUsers(jsonData.Realm);
+
+                    success = await _userDataService.UpdateUserRoles(jsonData.Realm, existingUsers.First(u => u.UserName == user.UserName), roles.Where(r => user.Roles.Contains(r.Name)));
+
+                    if (success)
+                    {
+                        _logger.LogInformation($"Added roles to user '{user.UserName}' in realm '{jsonData.Realm}'");
                     }
 
                 }
             }
 
             existingUsers = await _userDataService.GetUsers(jsonData.Realm);
-            foreach (var roleAdditions in jsonData.User_role_additions)
+            foreach (var roleAdditions in jsonData.UserRoleAdditions)
             {
-                var success = await _userDataService.UpdateUserRoles(jsonData.Realm, existingUsers.First(u => u.Email == roleAdditions.Email), roles.Where(r => roleAdditions.Roles.Contains(r.Name)));
+                var success = await _userDataService.UpdateUserRoles(jsonData.Realm, existingUsers.First(u => u.UserName == roleAdditions.UserName), roles.Where(r => roleAdditions.Roles.Contains(r.Name)));
 
                 if (success)
                 {
-                    _logger.LogInformation($"Updated roles on user '{roleAdditions.Email}' in realm '{jsonData.Realm}'");
+                    _logger.LogInformation($"Updated roles on user '{roleAdditions.UserName}' in realm '{jsonData.Realm}'");
                 }
             }
 
@@ -84,11 +91,11 @@ namespace Keycloak.Migrator.DataServices
 
             foreach (var user in jsonData.Users)
             {
-                var realmUser = existingUsers.First(u => u.Email == user.Email);
+                var realmUser = existingUsers.First(u => u.UserName == user.UserName);
                 //If the User doesn't exist, validation fails
                 if (realmUser == null)
                 {
-                    _logger.LogError($"Role '{user.Email}' was not found in realm '{jsonData.Realm}'");
+                    _logger.LogError($"Role '{user.UserName}' was not found in realm '{jsonData.Realm}'");
                     fullSuccess = false;
                     continue;
                 }
