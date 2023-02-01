@@ -24,6 +24,8 @@ public class Program
 
             rootCommand.AddValidateCommand();
 
+            rootCommand.AddClientCommand();
+
             await rootCommand.InvokeAsync(args);
         }
         catch (Exception ex)
