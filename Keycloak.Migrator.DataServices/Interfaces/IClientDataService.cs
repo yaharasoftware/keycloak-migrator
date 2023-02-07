@@ -17,5 +17,7 @@ namespace Keycloak.Migrator.DataServices.Interfaces
         /// <param name="clientIdName">Name of the client identifier.</param>
         /// <returns></returns>
         public Task<Client?> GetClient(string realmId, string clientIdName);
+
+        public Task<bool> UpdateClient(Client client, string realmId, string clientId);
     }
 }

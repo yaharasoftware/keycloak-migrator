@@ -34,5 +34,11 @@ namespace Keycloak.Migrator.DataServices
             IEnumerable<Client> clients = await _keycloakClient.GetClientsAsync(realmId);
             return clients?.Where(c => c.ClientId == clientIdName).FirstOrDefault();
         }
+
+        public async Task<bool> UpdateClient(Client client, string realmId, string clientId)
+        {
+            var result = await _keycloakClient.UpdateClientAsync(realmId, clientId, client);
+            return result;
+        }
     }
 }

@@ -74,6 +74,11 @@ namespace Keycloak.Migrator.DataServices.Modules
                .AsImplementedInterfaces()
                .SingleInstance();
 
+            builder
+               .RegisterType<ClientUpdateService>()
+               .AsImplementedInterfaces()
+               .SingleInstance();
+
 
         }
     }
