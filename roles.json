@@ -1,6 +1,6 @@
 {
   "realm": "master",
-  "roles":[
+  "realm_roles":[
     {
 		"name": "TestRole",
     	"description": "For Integration Test"
@@ -11,13 +11,13 @@
     	"first_name": "Testy",
 		"last_name": "McTesterson",
     	"email": "test@yaharasoftware.com",
-		"roles": [],
+		"realm_roles": [],
 		"password": "test",
 		"temporary_password": "true"
     }],
-"user_role_additions": [
+"user_realm_role_additions": [
     {
         "user_name": "test",
-		"roles": ["TestRole"]
+		"realm_roles": ["TestRole"]
     }]
 }

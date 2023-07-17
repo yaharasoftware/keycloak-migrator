@@ -10,7 +10,7 @@ namespace Keycloak.Migrator.Models
     /// <summary>
     /// Represents a UserRoleAddition from the JSON Migration.
     /// </summary>
-    public class JSONUserRoleAdditions
+    public class JSONUserClientRoleAdditions
     {
         /// <summary>
         /// Gets or sets the UserName
@@ -20,6 +20,11 @@ namespace Keycloak.Migrator.Models
         /// </value>
         [JsonProperty("user_name")]
         public string UserName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Client Name for the roles being added
+        /// </summary>
+        public string Client { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the Roles.

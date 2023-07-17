@@ -48,12 +48,19 @@ namespace Keycloak.Migrator.Models
         public string Email { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the Roles.
+        /// Gets or sets the Realm Roles.
         /// </summary>
         /// <value>
         /// The Roles.
         /// </value>
-        public List<string> Roles { get; set; } = new List<string>();
+        [JsonProperty("realm_roles")]
+        public List<string> RealmRoles { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Sets Client Roles
+        /// </summary>
+        [JsonProperty("client_roles")]
+        public Dictionary<string, List<string>> ClientRoles { get; set; } = new Dictionary<string, List<string>>();
 
         /// <summary>
         /// Password to set for the user

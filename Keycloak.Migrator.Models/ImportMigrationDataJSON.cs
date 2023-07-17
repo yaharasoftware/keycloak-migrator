@@ -10,9 +10,15 @@ namespace Keycloak.Migrator.Models
     public class ImportMigrationDataJSON
     {
         public string Realm { get; set; } = string.Empty;
-        public List<JSONRole> Roles { get; set; } = new List<JSONRole>();
+        [JsonProperty("realm_roles")]
+        public List<JSONRole> RealmRoles { get; set; } = new List<JSONRole>();
+        [JsonProperty("client_roles")]
+        public Dictionary<string, List<JSONRole>> ClientRoles { get; set; } = new Dictionary<string, List<JSONRole>>();
         public List<JSONUser> Users { get; set; } = new List<JSONUser>();
-        [JsonProperty("user_role_additions")]
-        public List<JSONUserRoleAdditions> UserRoleAdditions { get; set; } = new List<JSONUserRoleAdditions>();
+        [JsonProperty("user_realm_role_additions")]
+        public List<JSONUserRealmRoleAdditions> UserRealmRoleAdditions { get; set; } = new List<JSONUserRealmRoleAdditions>();
+
+        [JsonProperty("user_client_role_additions")]
+        public List<JSONUserClientRoleAdditions> UserClientRoleAdditions { get; set; } = new List<JSONUserClientRoleAdditions>();
     }
 }
