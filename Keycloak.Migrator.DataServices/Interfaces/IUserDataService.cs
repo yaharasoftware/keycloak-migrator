@@ -44,13 +44,23 @@ namespace Keycloak.Migrator.DataServices.Interfaces
         public Task<bool> AddUser(string realm, User user);
 
         /// <summary>
-        /// Add Roles to User
+        /// Add Realm Roles to User
         /// </summary>
         /// <param name="realm"></param>
         /// <param name="user"></param>
         /// <param name="roles"></param>
         /// <returns></returns>
-        public Task<bool> UpdateUserRoles(string realm, User user, IEnumerable<Role> roles);
+        public Task<bool> UpdateUserRealmRoles(string realm, User user, IEnumerable<Role> roles);
+
+        /// <summary>
+        /// Add Client Roles to User
+        /// </summary>
+        /// <param name="realm"></param>
+        /// <param name="user"></param>
+        /// <param name="clientId"></param>
+        /// <param name="roles"></param>
+        /// <returns></returns>
+        public Task<bool> UpdateUserClientRoles(string realm, User user, string clientId, IEnumerable<Role> roles);
 
         /// <summary>
         /// Set the user password - temporary or not

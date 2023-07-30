@@ -41,9 +41,14 @@ namespace Keycloak.Migrator.DataServices
             return await _keycloakClient.UpdateUserAsync(realm, user.Id, user);
         }
 
-        public async Task<bool> UpdateUserRoles(string realm, User user, IEnumerable<Role> roles)
+        public async Task<bool> UpdateUserRealmRoles(string realm, User user, IEnumerable<Role> roles)
         {
             return await _keycloakClient.AddRealmRoleMappingsToUserAsync(realm, user.Id, roles);
+        }
+
+        public async Task<bool> UpdateUserClientRoles(string realm, User user, string clientId, IEnumerable<Role> roles)
+        {
+            return await _keycloakClient.AddClientRoleMappingsToUserAsync(realm, user.Id, clientId, roles);
         }
 
         public async Task<bool> SetUserPassword(string realm, User user, string password, bool temporary = true)
